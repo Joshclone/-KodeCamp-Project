@@ -1,11 +1,13 @@
 import pkg from "pg";
 const { Pool } = pkg;
 
+import rapidAPI from "../services/rapidAPI.js";
+
 const pool = new Pool({
-    user: 'kells',
+    user: 'postgres',
     host: 'localhost',
     database: 'distancer',
-    password: '',
+    password: '1290384756',
     port: 5432,
 });
 
@@ -31,7 +33,7 @@ const getLocationById = (req, res) => {
 }
 
 // Create a new location
-const createLocation = (req, res) => {
+const createLocation = async (req, res) => {
     const {
         name,
         description,
@@ -43,7 +45,10 @@ const createLocation = (req, res) => {
     let coordinates = [];
 
     
-
+    let { latitude, longitude} = await rapidAPI.getLocationByIp()
+    
+    coordinates = JSON.stringify([latitude, longitude])
+    
     pool.query('INSERT INTO locations (name, description, website, phone, contact_person, coordinates) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [name, description, website, phone, contact_person, coordinates], (error, results) => {
         if (error) {
             throw error
@@ -60,9 +65,15 @@ const updateLocation = (req, res) => {
         description,
         website,
         phone,
-        coordinates,
         contact_person
     } = req.body
+
+    let coordinates = [];
+
+    let { latitude, logitude } = rapidAPI.getLocationByIp(req.ip)
+
+    coordinates = JSON.stringify([latitude, logitude])
+
 
     pool.query('UPDATE locations SET name = $1, description = $2, website = $3, phone = $4, coordinates = $5, contact_person = $6 WHERE id = $7', [name, description, website, phone, coordinates, contact_person, id], 
     (error) => {
