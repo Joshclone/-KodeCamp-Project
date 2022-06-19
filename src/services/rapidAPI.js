@@ -1,26 +1,32 @@
+
 import axios from "axios";
 
 const options = {
     method: 'GET',
-    url: 'https://fastah-ip.p.rapidapi.com/whereis/v1/json/auto',
+    url: 'https://ip-geolocation-ipwhois-io.p.rapidapi.com/json/',
     headers: {
       'X-RapidAPI-Key': '2c1e698eaemsh7ec7ca484be5e38p1f17ffjsnfd5114e9e1d4',
-      'X-RapidAPI-Host': 'fastah-ip.p.rapidapi.com'
+      'X-RapidAPI-Host': 'ip-geolocation-ipwhois-io.p.rapidapi.com'
     }
-  }  
-
-const getDistance = async (location) => {
-    const [latitude, longitude] = location
-
-
+  };
+    
+const getLocationByIp = async (ip = null) => {
+    // options.params = {ip}
+    //console.log(options)
+    try {
+      let response = await axios.request(options)
+      console.log(response.data)
+      return response.data
+    } catch (error) {
+      return error      
+    }
 }
 
-const getLocationByIp = async () => {
-    axios.request(options).then(function (response) {
-        console.log(response.data);
-    }).catch(function (error) {
-        console.error(error);
-    });
-}
 
-export default {getLocationByIp, getDistance}
+// const getDistance = async (location) => {
+//     const [latitude, longitude] = location
+
+
+// }
+
+export default {getLocationByIp}
