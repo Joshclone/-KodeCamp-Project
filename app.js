@@ -13,8 +13,10 @@ app.use(bodyParser.urlencoded({
     extended: true,
 }))
 
+app.use(routes)
+
 app.get('/', (req, res) => {
-    res.json({ info: "Node.js, Express, and Postgres API"})
+    res.json({ info: "Node.js, Express, and Postgres API", ip: req.ip})
 })
 
 app.listen(port, () => {
